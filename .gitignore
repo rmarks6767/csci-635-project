@@ -1,2 +1,4 @@
 __pycache__
-data
+
+# Arabic is too big so download that one manually
+data/arabic

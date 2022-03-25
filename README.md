@@ -1,5 +1,6 @@
 # csci-635-project
 
+NOTE: Arabic is too big so download that one manually
 
 ## All different class labels (22)
 0
