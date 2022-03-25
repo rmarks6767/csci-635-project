@@ -1,7 +1,11 @@
 from PIL import Image
 import os
-data=Image.open(os.path.join(os.path.dirname(__file__)))
-new_data=data.rotate(30)
-new_data.show()
+path=r'C:\Users\vsadr\OneDrive\Documents\GitHub\sylheti-training-data'
+for i in os.listdir(path):
+    data=Image.open(path+'\\' +i)
+    new_data=data.rotate(1)
+    filename='augmented'+i
+    new_data.save(filename,'png')
+    
 
 
