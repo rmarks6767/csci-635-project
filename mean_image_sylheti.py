@@ -46,15 +46,26 @@ for j in image7:
 for j in image8:
     mean8+=j/len(image8)
 for j in image9:
-    mean9+=j/len(image9)
-mean=[mean0,mean1,mean2,mean3,mean4,mean5,mean6,mean7,mean8,mean9]
-# for m in mean:
-#    for i in range(len(m)):
-#        for j in range(len(m[i])):
-#            if m[i][j][0]>180:
-#                m[i][j]=[255,255,255]
-#            else:
-#                m[i][j]=[0,0,0]
-                
-imean=Image.fromarray(mean9.astype(np.uint8))
-imean.show()
+    mean9+=j/len(image9)                
+
+imean0=Image.fromarray(mean0.astype(np.uint8))
+imean1=Image.fromarray(mean1.astype(np.uint8))
+imean2=Image.fromarray(mean2.astype(np.uint8))
+imean3=Image.fromarray(mean3.astype(np.uint8))
+imean4=Image.fromarray(mean4.astype(np.uint8))
+imean5=Image.fromarray(mean5.astype(np.uint8))
+imean6=Image.fromarray(mean6.astype(np.uint8))
+imean7=Image.fromarray(mean7.astype(np.uint8))
+imean8=Image.fromarray(mean8.astype(np.uint8))
+imean9=Image.fromarray(mean9.astype(np.uint8))
+
+imean1.save('mean_1_sylethi.png','png')
+imean2.save('mean_2_sylethi.png','png')
+imean3.save('mean_3_sylethi.png','png')
+imean4.save('mean_4_sylethi.png','png')
+imean5.save('mean_5_sylethi.png','png')
+imean6.save('mean_6_sylethi.png','png')
+imean7.save('mean_7_sylethi.png','png')
+imean8.save('mean_8_sylethi.png','png')
+imean9.save('mean_9_sylethi.png','png')
+
