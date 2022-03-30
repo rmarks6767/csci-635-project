@@ -1,5 +1,6 @@
 import cv2
 import sys
+import numpy as np
 
 num_to_label = {
   0: '0',
@@ -17,7 +18,7 @@ num_to_label = {
 def read_trim_split(image, num_width, num_height, id):
   im_in = cv2.imread(image)
 
-  # Binarize the image to remove extra lines and stuff
+  # Binarize the image to remove extra lines
   _, im_bin = cv2.threshold(im_in, 128, 255, cv2.THRESH_BINARY)
   h, w, _ = im_bin.shape
 
@@ -31,8 +32,33 @@ def read_trim_split(image, num_width, num_height, id):
     
   # Write the images to the sylheti training data file
   for i, image in enumerate(images):
-    # Resize image to match 28x28 mnist data
-    im = cv2.resize(image, (28, 28))
+    # 1. Convert to grayscale
+    im_gray = 255 - cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # 2. Crop to important area
+    _, thresh = cv2.threshold(255 - im_gray, 127, 255, cv2.THRESH_BINARY)
+    white_pt_coords = np.argwhere(thresh)
+    min_y = min(white_pt_coords[:,0])
+    min_x = min(white_pt_coords[:,1])
+    max_y = max(white_pt_coords[:,0])
+    max_x = max(white_pt_coords[:,1])
+    crop = im_gray[min_y:max_y,min_x:max_x]
+
+    # 3. Add padding around the cropped image to square it
+    w, h = crop.shape
+    diff = max(w, h)
+    yoff = round((diff-h)/2)
+    xoff = round((diff-w)/2)
+    new_im = 255 - np.zeros((diff, diff))
+    new_im[xoff:xoff+w, yoff:yoff+h] = crop
+
+    # 4. Resize image to match 28x28 mnist data
+    im_resize = cv2.resize(im_gray, (28, 28), interpolation = cv2.INTER_AREA)
+
+    # 5. Binarize after scaling
+    _, im = cv2.threshold(im_resize, 1, 255, cv2.THRESH_BINARY)
+
+    # 6. Save this new file
     cv2.imwrite(f'./data/sylheti/{id + i}_{num_to_label[i % 10]}.png', im)
 
   return id + len(images)
