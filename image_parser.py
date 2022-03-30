@@ -1,6 +1,19 @@
 import cv2
 import sys
 
+num_to_label = {
+  0: '0',
+  1: '1',
+  2: '2-arabic-sylheti',
+  3: '3-sylheti',
+  4: '4-sylheti',
+  5: '5-sylheti',
+  6: '6-sylheti',
+  7: '7-arabic-sylheti',
+  8: '8',
+  9: '9',
+}
+
 def read_trim_split(image, num_width, num_height, id):
   im_in = cv2.imread(image)
 
@@ -9,8 +22,8 @@ def read_trim_split(image, num_width, num_height, id):
   h, w, _ = im_bin.shape
 
   # Resize the image so it will be split equally
-  h = round(h / 13)
-  w = round(w / 10)
+  h = round(h / int(num_height))
+  w = round(w / int(num_width))
   im_bin = cv2.resize(im_bin, (w * int(num_width), h * int(num_height)))
   
   # Split the image into the defined pieces
@@ -20,7 +33,7 @@ def read_trim_split(image, num_width, num_height, id):
   for i, image in enumerate(images):
     # Resize image to match 28x28 mnist data
     im = cv2.resize(image, (28, 28))
-    cv2.imwrite(f'./sylheti-training-data/{id + i}-{i % 10}.png', im)
+    cv2.imwrite(f'./data/sylheti/{id + i}_{num_to_label[i % 10]}.png', im)
 
   return id + len(images)
 
