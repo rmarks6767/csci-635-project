@@ -9,7 +9,18 @@ from mnist import MNIST
 np.set_printoptions(linewidth=np.inf)
 
 
-
+#############################################################
+# This is the main function to call to get augmented data
+#
+# INPUT: An array that represent the number
+#        (For example, grayscale values of each pixel in the picture of the number)
+#
+# RETURN: A list that has 4 new arrays:
+#     1. The number is moved right 1 pixel
+#     2. The number is moved left 1 pixel
+#     3. The number is moved up 1 pixel
+#     4. The number is moved down 1 pixel
+#############################################################
 def data_augment(sample):
     # the sample picture is 28x28
     size = 28
@@ -130,18 +141,21 @@ def binarize(sample):
     return result
 
 
+######################
+# Mainly for testing
+######################
 def main():
     sylheti_data = []
     sylheti_label = []
-    for img in os.listdir('./data/sylheti'):
+    for img in os.listdir('../data/sylheti'):
         # Read in the images
         _, label = img.replace('.png', '').split('_')
-        image = imread(os.path.join('data/sylheti', img), as_gray=True)
+        image = imread(os.path.join('../data/sylheti', img), as_gray=True)
 
         # Append them to our images and labels array
         sylheti_data.append(image.flatten())
         sylheti_label.append(label)
-    mndata = MNIST(os.path.join(os.path.dirname(__file__), 'data/english'))
+    mndata = MNIST(os.path.join(os.path.dirname(__file__), '../data/english'))
     english_train_data, english_train_label = mndata.load_training()
     english_test_data, english_test_label = mndata.load_testing()
 
