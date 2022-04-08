@@ -171,5 +171,5 @@ def main():
         pretty_print(binarize(augmented))
         augmented = moving_right(augmented, 28)
 
-
-main()
+if __name__ == "__main__":
+    main()
