@@ -1,2 +1,6 @@
 'download all the package we use by typing pip install -r requirements.txt in the terminal'
 gzip
+numpy~=1.22.3
+scikit-image~=0.19.2
+opencv-python~=4.5.5.64
+Pillow~=9.0.1
