@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn import svm
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import accuracy_score
-# from joblib import dump, load
 from read_all_data import read_all_data
 
 def run_training():
