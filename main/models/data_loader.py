@@ -6,16 +6,16 @@ import os
   pass in the flatten parameter
 '''
 def load_data(lang, flatten = False):
-  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'./{lang}/{lang}_train_images.npz'))
+  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'../data/{lang}/{lang}_train_images.npz'))
   train_images = train_images = npzfile['arr_0']
 
-  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'./{lang}/{lang}_train_labels.npz'))
+  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'../data/{lang}/{lang}_train_labels.npz'))
   train_labels = npzfile['arr_0']
 
-  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'./{lang}/{lang}_test_images.npz'))
+  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'../data/{lang}/{lang}_test_images.npz'))
   test_images = npzfile['arr_0']
 
-  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'./{lang}/{lang}_test_labels.npz'))
+  npzfile = np.load(os.path.join(os.path.dirname(__file__), f'../data/{lang}/{lang}_test_labels.npz'))
   test_labels = npzfile['arr_0']
 
   if flatten:
@@ -41,6 +41,9 @@ def load_all_data(flatten = False):
   # Combine the test images and labels
   test_images = np.concatenate((arb_test_imgs, eng_test_imgs, syl_test_imgs))
   test_labels = np.concatenate((arb_test_lbls, eng_test_lbls, syl_test_lbls))
+
+  print(f'Total Training images loaded: {len(train_images)}')
+  print(f'Total Test images loaded: {len(test_images)}')
 
   # Return the training and test data
   return (train_images, train_labels), (test_images, test_labels)

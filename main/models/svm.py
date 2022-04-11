@@ -1,56 +1,50 @@
-import tensorflow as tf
-from tensorflow.keras import layers, models
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import GridSearchCV
 from data_loader import load_all_data
+from joblib import dump, load
 import numpy as np
 
-# Support Vector Machine
 class SVM:
-  def __init__(self, model_name = 'cnn.h5'):
-    self.model_name = model_name
+  def __init__(self, model_filename = 'svm.joblib'):
+    # Best parameters that were found after running on a smaller data set
+    params = [{ "kernel": ["linear"], "C": [1] }]
 
-    # Model will have 3 convolution layers into three hidden NN layers,
-    # using Softmax for activation on the final layer
-    self.model = models.Sequential([
-      layers.Conv2D(28, (1,1), padding='same', activation="relu",input_shape=(28, 28, 1)),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Flatten(),
-      layers.Dense(100, activation="relu"),
-      layers.Dense(64, activation="relu"),
-      layers.Dropout(0.2),
-      layers.Dense(10, activation="softmax")
-    ])
-
-    # Define a loss function for our model
-    self.loss_func = tf.keras.losses.SparseCategoricalCrossentropy()
+    # Create a probability based SVM
+    svm = SVC(probability=True)
+    self.model = GridSearchCV(svm, params, cv=2, n_jobs=6, verbose=3)
+    self.model_filename = model_filename
 
   def train(self):
-    # Load the data
-    (train_images, train_labels), (test_images, test_labels) = load_all_data()
-    train_images, test_images = train_images / 255.0, test_images / 255.0
+    # Get the images from the directory
+    (train_images, train_labels), (test_images, test_labels) = load_all_data(True)
 
-    # Define predictions and loss function outputs
-    predictions = self.model(train_images[:1]).numpy()
-    self.loss_func(train_labels[:1], predictions).numpy()
+    # Use Grid Search to fit an Support Vector Machine
+    self.model.fit(train_images, train_labels)
 
-    # Compile and run the model on our data
-    self.model.compile(optimizer='adam', loss=self.loss_func, metrics=['accuracy'])
-    self.model.fit(train_images, train_labels, epochs=self.epochs)
-    self.model.evaluate(test_images, test_labels, verbose=2)
+    # Save the model that we just created
+    dump(self.model, self.model_filename) 
 
-    # Save the model so we can use it later
-    self.model.save(self.model_name)
+    # Run some predictions and see how accurate they are with a confusion matrix
+    predictions = self.model.predict(test_images)
+
+    # Output the confusion matrix and model report
+    self.print_results(test_labels, predictions)
+
+  def print_results(self, test_labels, predictions):
+    labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    print("\nConfusion matrix:")
+    print("Labels: {0}\n".format(",".join(labels)))
+    print(confusion_matrix(test_labels, predictions, labels=labels))
+    print("\nClassification report:")
+    print(classification_report(test_labels, predictions))
 
   def test(self, image, correct_output):
     # Load the model from the file we saved it to
-    model = tf.keras.models.load_model(self.model_name)
+    model = load(self.model_filename) 
 
     # Structure the image how the model will read it
-    images = []
-    image = np.array(images)
+    image = np.array([image])
 
     # Predict the image
     prediction = model.predict(image)

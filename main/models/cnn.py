@@ -1,28 +1,27 @@
 import tensorflow as tf
-from tensorflow.keras import layers, models
-from data.data_loader import load_all_data
+from data_loader import load_all_data
 import numpy as np
 
 # Convolutional Neural Network
 class CNN:
-  def __init__(self, model_name = 'cnn.h5', epochs = 10):
-    self.model_name = model_name
+  def __init__(self, model_filename = 'cnn.h5', epochs = 10):
+    self.model_filename = model_filename
     self.epochs = epochs
 
     # Model will have 3 convolution layers into three hidden NN layers,
     # using Softmax for activation on the final layer
-    self.model = models.Sequential([
-      layers.Conv2D(28, (1,1), padding='same', activation="relu",input_shape=(28, 28, 1)),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      layers.MaxPooling2D((2, 2), strides=2),
-      layers.Flatten(),
-      layers.Dense(100, activation="relu"),
-      layers.Dense(64, activation="relu"),
-      layers.Dropout(0.2),
-      layers.Dense(10, activation="softmax")
+    self.model = tf.keras.models.Sequential([
+      tf.keras.layers.Conv2D(28, (1,1), padding='same', activation="relu",input_shape=(28, 28, 1)),
+      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
+      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
+      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
+      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
+      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
+      tf.keras.layers.Flatten(),
+      tf.keras.layers.Dense(100, activation="relu"),
+      tf.keras.layers.Dense(64, activation="relu"),
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(10, activation="softmax")
     ])
 
     # Define a loss function for our model
@@ -43,15 +42,14 @@ class CNN:
     self.model.evaluate(test_images, test_labels, verbose=2)
 
     # Save the model so we can use it later
-    self.model.save(self.model_name)
+    self.model.save(self.model_filename)
 
   def test(self, image, correct_output):
     # Load the model from the file we saved it to
-    model = tf.keras.models.load_model(self.model_name)
+    model = tf.keras.models.load_model(self.model_filename)
 
     # Structure the image how the model will read it
-    images = []
-    image = np.array(images)
+    image = np.array([image])
 
     # Predict the image
     prediction = model.predict(image)
