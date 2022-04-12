@@ -1,27 +1,31 @@
 # csci-635-project
 
-NOTE: Arabic is too big so download that one manually
-
 ## All different class labels (22)
-0
-0-arabic
-1
-2
-2-arabic-sylheti
-3
-3-arabic
-3-sylheti
-4
-4-arabic
-4-sylheti
-5
-5-arabic
-5-sylheti
-6
-6-arabic
-6-sylheti
-7
-7-arabic-sylheti
-8
-8-arabic
-9
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+
+## Different Models
+
+### SVM 
+Here are some other parameters that can be used to tune SVM (linear and C=1 worked the best):
+
+```py
+{
+  "kernel": ["rbf"],
+  "C": [1, 10, 100, 1000],
+  "gamma": [1e-2, 1e-3, 1e-4, 1e-5]
+}
+```
+
+### Convolutional Neural Network
+
+### Neural Network Transfer Learning
+- Create base model for English or Arabic dataset and apply it to the sylheti data
