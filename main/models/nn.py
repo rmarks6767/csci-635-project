@@ -2,24 +2,18 @@ import tensorflow as tf
 from data.data_loader import load_all_data
 import numpy as np
 
-# Convolutional Neural Network
-class CNN:
-  def __init__(self, model_filename = 'cnn.h5', epochs = 5):
+# Neural Network
+class NN:
+  def __init__(self, model_filename = 'nn.h5', epochs = 5):
     self.model_filename = model_filename
     self.epochs = epochs
 
-    # Model will have 3 convolution layers into three hidden NN layers,
-    # using Softmax for activation on the final layer
+    # Define two hidden layers for the model
     self.model = tf.keras.models.Sequential([
-      tf.keras.layers.Conv2D(28, (1,1), padding='same', activation="relu",input_shape=(28, 28, 1)),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
-      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
-      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
       tf.keras.layers.Flatten(),
-      tf.keras.layers.Dense(100, activation="relu"),
-      tf.keras.layers.Dense(64, activation="relu"),
+      tf.keras.layers.Dense(784),
+      tf.keras.layers.Dense(100),
+      tf.keras.layers.Dense(64),
       tf.keras.layers.Dropout(0.2),
       tf.keras.layers.Dense(20, activation="softmax")
     ])

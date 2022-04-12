@@ -6,15 +6,18 @@
 ''' 
 from models.svm import SVM
 from models.cnn import CNN
+from models.nn import NN
 
 def main():
   # Create all of the models that we have
   svm = SVM()
-  cnn = CNN()
+  # cnn = CNN()
+  # nn = NN()
 
-  # Train them all (if they do not exist already)
+  # Train them all
   svm.train()
-  cnn.train()
+  # cnn.train()
+  # nn.train()
 
   # Analyze the results of the training (maybe use some data for cross validation)
 

@@ -1,7 +1,7 @@
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import GridSearchCV
-from data_loader import load_all_data
+from data.data_loader import load_all_data
 from joblib import dump, load
 import numpy as np
 
@@ -32,9 +32,9 @@ class SVM:
     self.print_results(test_labels, predictions)
 
   def print_results(self, test_labels, predictions):
-    labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     print("\nConfusion matrix:")
-    print("Labels: {0}\n".format(",".join(labels)))
+    # print("Labels: {0}\n".format(",".join(labels)))
     print(confusion_matrix(test_labels, predictions, labels=labels))
     print("\nClassification report:")
     print(classification_report(test_labels, predictions))
