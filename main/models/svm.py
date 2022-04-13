@@ -1,9 +1,10 @@
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.model_selection import GridSearchCV
-from data.data_loader import load_all_data
-from joblib import dump, load
+import tensorflow as tf
 import numpy as np
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV
+from joblib import dump, load
+from utils.print import pretty_print_confusion
 
 class SVM:
   def __init__(self, model_filename = 'svm.joblib'):
@@ -15,9 +16,9 @@ class SVM:
     self.model = GridSearchCV(svm, params, cv=2, n_jobs=6, verbose=3)
     self.model_filename = model_filename
 
-  def train(self):
-    # Get the images from the directory
-    (train_images, train_labels), (test_images, test_labels) = load_all_data(True)
+  def train(self, train_images, train_labels):
+    # For the SVM, we have to flatten our data
+    train_images = train_images.flatten().reshape(len(train_images), 784)
 
     # Use Grid Search to fit an Support Vector Machine
     self.model.fit(train_images, train_labels)
@@ -25,27 +26,21 @@ class SVM:
     # Save the model that we just created
     dump(self.model, self.model_filename) 
 
-    # Run some predictions and see how accurate they are with a confusion matrix
-    predictions = self.model.predict(test_images)
+  def evaluate(self, test_images, test_labels, should_load = False):
+    # If we want to load the load we can use the load tag
+    if should_load:
+      self.model = load(self.model_filename)
 
-    # Output the confusion matrix and model report
-    self.print_results(test_labels, predictions)
+    # Run predictions on our test data and evaluate results
+    predictions = []
+    for p in self.model.predict(test_images):
+      predictions.append(np.argmax(p))
 
-  def print_results(self, test_labels, predictions):
-    labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    print("\nConfusion matrix:")
-    # print("Labels: {0}\n".format(",".join(labels)))
-    print(confusion_matrix(test_labels, predictions, labels=labels))
-    print("\nClassification report:")
+    # Create a confusion matrix for our data
+    print('\nConfusion Matrix:')
+    pretty_print_confusion(tf.math.confusion_matrix(test_labels, predictions))
+
+    # Print the classification report
+    print('\nClassification report:')
+    self.model.evaluate(test_images, test_labels, verbose=2)
     print(classification_report(test_labels, predictions))
-
-  def test(self, image, correct_output):
-    # Load the model from the file we saved it to
-    model = load(self.model_filename) 
-
-    # Structure the image how the model will read it
-    image = np.array([image])
-
-    # Predict the image
-    prediction = model.predict(image)
-    print(f'{np.argmax(prediction[0])} should be {correct_output}')

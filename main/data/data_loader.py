@@ -59,12 +59,12 @@ def load_all_data(flatten = False):
   (syl_train_imgs, syl_train_lbls), (syl_test_imgs, syl_test_lbls) = load_data('sylheti',flatten)
 
   # Combine the training images and labels
-  train_images = np.concatenate((arb_train_imgs[:800], eng_train_imgs[:800], syl_train_imgs[:800]))
-  train_labels = np.concatenate((arb_train_lbls[:800], eng_train_lbls[:800], syl_train_lbls[:800]))
+  train_images = np.concatenate((arb_train_imgs, eng_train_imgs, syl_train_imgs))
+  train_labels = np.concatenate((arb_train_lbls, eng_train_lbls, syl_train_lbls))
 
   # Combine the test images and labels
-  test_images = np.concatenate((arb_test_imgs[:200], eng_test_imgs[:200], syl_test_imgs[:200]))
-  test_labels = np.concatenate((arb_test_lbls[:200], eng_test_lbls[:200], syl_test_lbls[:200]))
+  test_images = np.concatenate((arb_test_imgs, eng_test_imgs, syl_test_imgs))
+  test_labels = np.concatenate((arb_test_lbls, eng_test_lbls, syl_test_lbls))
 
   # # One hot encode the labels
   # train_labels = tf.one_hot(train_labels, 20)
@@ -75,5 +75,3 @@ def load_all_data(flatten = False):
 
   # Return the training and test data
   return (train_images, train_labels), (test_images, test_labels)
-
-load_all_data()

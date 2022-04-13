@@ -1,6 +1,7 @@
 import tensorflow as tf
-from data.data_loader import load_all_data
 import numpy as np
+from sklearn.metrics import classification_report
+from utils.print import pretty_print_confusion
 
 # Neural Network
 class NN:
@@ -21,10 +22,8 @@ class NN:
     # Define a loss function for our model
     self.loss_func = tf.keras.losses.SparseCategoricalCrossentropy()
 
-  def train(self):
-    # Load the data
-    (train_images, train_labels), (test_images, test_labels) = load_all_data()
-    train_images, test_images = train_images / 255.0, test_images / 255.0
+  def train(self, train_images, train_labels):
+    train_images = train_images / 255.0
 
     # Define predictions and loss function outputs
     predictions = self.model(train_images[:1]).numpy()
@@ -33,18 +32,27 @@ class NN:
     # Compile and run the model on our data
     self.model.compile(optimizer='adam', loss=self.loss_func, metrics=['accuracy'])
     self.model.fit(train_images, train_labels, epochs=self.epochs)
-    self.model.evaluate(test_images, test_labels, verbose=2)
 
     # Save the model so we can use it later
     self.model.save(self.model_filename)
 
-  def test(self, image, correct_output):
-    # Load the model from the file we saved it to
-    model = tf.keras.models.load_model(self.model_filename)
+  def evaluate(self, test_images, test_labels, load = False):
+    test_images = test_images / 255.0
 
-    # Structure the image how the model will read it
-    image = np.array([image])
+    # If we want to load the load we can use the load tag
+    if load:
+      self.model = tf.keras.models.load_model(self.model_filename)
 
-    # Predict the image
-    prediction = model.predict(image)
-    print(f'{np.argmax(prediction[0])} should be {correct_output}')
+    # Run predictions on our test data and evaluate results
+    predictions = []
+    for p in self.model.predict(test_images):
+      predictions.append(np.argmax(p))
+
+    # Create a confusion matrix for our data
+    print('\nConfusion Matrix:')
+    pretty_print_confusion(tf.math.confusion_matrix(test_labels, predictions))
+
+    # Print the classification report
+    print('\nClassification report:')
+    self.model.evaluate(test_images, test_labels, verbose=2)
+    print(classification_report(test_labels, predictions))
