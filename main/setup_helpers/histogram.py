@@ -1,7 +1,9 @@
 import numpy as np
 import skimage.io
 import matplotlib.pyplot as plt
-image=skimage.io.imread(r'C:\Users\vsadr\OneDrive\Documents\GitHub\data\sylheti\mean_images\mean_3_sylethi.png')
+import os
+paths=os.path.join(os.path.dirname(__file__).replace('setup_helpers',''), 'data\sylheti\mean_images\mean_3_sylethi.png')
+image=skimage.io.imread(paths)
 histogram, bin_edges = np.histogram(image, bins=256, range=(0, 256))
 plt.figure()
 plt.title("Grayscale Histogram")
