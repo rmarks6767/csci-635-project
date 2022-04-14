@@ -6,11 +6,16 @@ from utils.print import pretty_print_confusion
 
 # Transfer Neural Network from MobileNet_v2
 class TransferNN:
-  def __init__(self, base_model, model_filename = 'transfer.h5', epochs = 5):
+  def __init__(self, base_model, model_filename = 'transfer.h5', epochs = 5, load_base=False):
     self.model_filename = model_filename
     self.epochs = epochs
+    base_model = base_model.model
+
+    if load_base == True:
+      base_model = tf.keras.models.load_model(f'main/trained_models/base_{self.model_filename}')
+
     self.model = tf.keras.models.Sequential([
-      base_model.model,
+      base_model,
       tf.keras.layers.Dense(20),
       tf.keras.layers.Dense(65),
       tf.keras.layers.Dense(20)
@@ -52,5 +57,7 @@ class TransferNN:
 
     # Print the classification report
     print('\nClassification report:')
-    self.model.evaluate(test_images, test_labels, verbose=2)
-    print(classification_report(test_labels, predictions))
+    report = classification_report(test_labels, predictions, output_dict=True, zero_division=0)
+    print(classification_report(test_labels, predictions, zero_division=0))
+
+    return report

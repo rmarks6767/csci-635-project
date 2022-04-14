@@ -41,4 +41,7 @@ class SVM:
 
     # Print the classification report
     print('\nClassification report:')
-    print(classification_report(test_labels, predictions))
+    report = classification_report(test_labels, predictions, output_dict=True, zero_division=0)
+    print(classification_report(test_labels, predictions, zero_division=0))
+
+    return report

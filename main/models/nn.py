@@ -54,5 +54,7 @@ class NN:
 
     # Print the classification report
     print('\nClassification report:')
-    self.model.evaluate(test_images, test_labels, verbose=2)
-    print(classification_report(test_labels, predictions))
+    report = classification_report(test_labels, predictions, output_dict=True, zero_division=0)
+    print(classification_report(test_labels, predictions, zero_division=0))
+
+    return report

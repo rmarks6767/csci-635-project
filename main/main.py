@@ -84,20 +84,30 @@ def main():
   svm = SVM()
   cnn = CNN()
   nn = NN()
-  cnn_transfer = CNN(model_filename='transfer_cnn_base.h5')
-  transferNN = TransferNN(base_model=cnn_transfer)
+  cnn_transfer = CNN(model_filename='base_transfer.h5')
+  transferNN = TransferNN(base_model=cnn_transfer, load_base=True if args.use_local_models else False)
 
   if not args.use_local_models:
     start = time.time()
 
     # Train all of our models 
+    print('===== START TRAINING SVM ====')
     svm.train(training_images_svm, training_labels_svm)
+    print('===== END TRAINING SVM ====')
+
+    print('===== START TRAINING CNN ====')
     cnn.train(training_images, training_labels, args.no_verbose)
+    print('===== START TRAINING CNN ====')
+
+    print('===== START TRAINING NN ====')
     nn.train(training_images, training_labels, args.no_verbose)
+    print('===== END TRAINING NN ====')
 
     # We have to also train the base model for our transferred model
-    cnn_transfer.train(training_images_transfer, training_labels_transfer, args.no_verbose)
+    print('===== START TRAINING TRANSFER NN ====')
+    cnn_transfer.train(training_images_transfer, training_labels_transfer, False)
     transferNN.train(s_train_images, s_train_labels, args.no_verbose)
+    print('===== END TRAINING TRANSFER NN ====')
 
     print(f'\nTRAINING MODELS FINISHED IN: {round(time.time() - start, 2)} SECONDS')
 
@@ -105,25 +115,43 @@ def main():
     print('\n==================== BEGIN RESULTS ====================\n')
 
     ############ Step 4 - Gather statistics about our data on the model ############ 
-    print('\n===== BEGIN RESULTS FOR SVM =====\n')
-    svm.evaluate(test_images, test_labels, args.use_local_models)
+    print('\n===== BEGIN RESULTS FOR SVM (this one takes a while to print for some reason) =====\n')
+    svm_results = svm.evaluate(test_images, test_labels, args.use_local_models)
     print('===== END RESULTS FOR SVM =====\n')
 
     print('===== BEGIN RESULTS FOR CNN =====\n')
-    cnn.evaluate(test_images, test_labels, args.use_local_models)
+    cnn_results = cnn.evaluate(test_images, test_labels, args.use_local_models)
     print('===== END RESULTS FOR CNN =====\n')
 
     print('===== BEGIN RESULTS FOR NN =====\n')
-    nn.evaluate(test_images, test_labels, args.use_local_models)
+    nn_results = nn.evaluate(test_images, test_labels, args.use_local_models)
     print('===== END RESULTS FOR NN =====\n')
 
     print('===== BEGIN RESULTS FOR TRANSFER NN =====\n')
-    transferNN.evaluate(s_test_images, s_test_labels, args.use_local_models)
+    transfer_results = transferNN.evaluate(s_test_images, s_test_labels, args.use_local_models)
     print('===== END RESULTS FOR TRANSFER NN =====\n')
 
     print('\n==================== END RESULTS ====================\n')
 
-  ############ Step 5 - Decide which model has performed best on our data ############ 
+    ############ Step 5 - Decide which model has performed best on our data ############ 
+    results = {
+      'Support Vector Machine': svm_results,
+      'Convolutional Neural Network': cnn_results,
+      'Neural Network': nn_results,
+      'Transferred Neural Network': transfer_results,
+    }
+
+    print('\n==================== MODEL ACCURACIES SUMMARY ====================\n')
+
+    best_model = 'Support Vector Machine'
+    for key, value in results.items():
+      if results[best_model]['accuracy'] < value['accuracy']:
+        best_model = key
+
+      print(f'{key} Accuracy: ' + str(round(value['accuracy'] * 100, 2)))
+    
+    print('\n==================== BEST MODEL AWARD ====================\n')
+    print(f'============== {best_model} ==============')
 
 if __name__ == "__main__":
-    main()
+  main()
