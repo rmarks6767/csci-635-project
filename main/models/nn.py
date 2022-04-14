@@ -22,7 +22,7 @@ class NN:
     # Define a loss function for our model
     self.loss_func = tf.keras.losses.SparseCategoricalCrossentropy()
 
-  def train(self, train_images, train_labels):
+  def train(self, train_images, train_labels, verbose = True):
     train_images = train_images / 255.0
 
     # Define predictions and loss function outputs
@@ -31,17 +31,17 @@ class NN:
 
     # Compile and run the model on our data
     self.model.compile(optimizer='adam', loss=self.loss_func, metrics=['accuracy'])
-    self.model.fit(train_images, train_labels, epochs=self.epochs)
+    self.model.fit(train_images, train_labels, epochs=self.epochs, verbose=verbose)
 
     # Save the model so we can use it later
-    self.model.save(self.model_filename)
+    self.model.save(f'main/trained_models/{self.model_filename}')
 
   def evaluate(self, test_images, test_labels, load = False):
     test_images = test_images / 255.0
 
     # If we want to load the load we can use the load tag
     if load:
-      self.model = tf.keras.models.load_model(self.model_filename)
+      self.model = tf.keras.models.load_model(f'main/trained_models/{self.model_filename}')
 
     # Run predictions on our test data and evaluate results
     predictions = []
@@ -54,5 +54,7 @@ class NN:
 
     # Print the classification report
     print('\nClassification report:')
-    self.model.evaluate(test_images, test_labels, verbose=2)
-    print(classification_report(test_labels, predictions))
+    report = classification_report(test_labels, predictions, output_dict=True, zero_division=0)
+    print(classification_report(test_labels, predictions, zero_division=0))
+
+    return report

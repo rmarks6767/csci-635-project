@@ -1,28 +1,27 @@
-import tensorflow as tf
 import numpy as np
 import os
 
 labels = {
-  0: 'eng-syl-0/arb-5',
-  1: 'all-1',
-  2: 'eng-2',
-  3: 'eng-3',
-  4: 'eng-4',
-  5: 'eng-5',
-  6: 'eng-6',
-  7: 'eng-7/arb-6',
-  8: 'eng-syl-8',
-  9: 'all-9',
-  10: 'arb-0',
-  11: 'arb-syl-2',
-  12: 'arb-3',
-  13: 'syl-3',
-  14: 'arb-4',
-  15: 'syl-4',
-  16: 'syl-5',
-  17: 'syl-6',
-  18: 'arb-syl-7',
-  19: 'arb-8',
+  0: 'English and Sylheti 0, Arabic 5',
+  1: 'All Languages 1',
+  2: 'English 2',
+  3: 'English 3',
+  4: 'English 4',
+  5: 'English 5',
+  6: 'English 6',
+  7: 'English 7, Arabic 6',
+  8: 'English and Sylheti 8',
+  9: 'All Languages 9',
+  10: 'Arabic 0',
+  11: 'Arabic and Sylheti 2',
+  12: 'Arabic 3',
+  13: 'Sylheti 3',
+  14: 'Arabic 4',
+  15: 'Sylheti 4',
+  16: 'Sylheti 5',
+  17: 'Sylheti 6',
+  18: 'Arabic and Sylheti 7',
+  19: 'Arabic 8',
 }
 
 '''
@@ -65,10 +64,6 @@ def load_all_data(flatten = False):
   # Combine the test images and labels
   test_images = np.concatenate((arb_test_imgs, eng_test_imgs, syl_test_imgs))
   test_labels = np.concatenate((arb_test_lbls, eng_test_lbls, syl_test_lbls))
-
-  # # One hot encode the labels
-  # train_labels = tf.one_hot(train_labels, 20)
-  # test_labels = tf.one_hot(test_labels, 20)
 
   print(f'Total Training images loaded: {len(train_images)}')
   print(f'Total Test images loaded: {len(test_images)}')

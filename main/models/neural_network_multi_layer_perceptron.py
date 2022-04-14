@@ -2,14 +2,12 @@ import os.path
 from sklearn.neural_network import MLPClassifier
 from mnist import MNIST
 
+from main.data.data_loader import load_all_data
+
 
 def main():
     # PLAYING AROUND With ENGLISH DATA
-    mndata = MNIST(os.path.join(os.path.dirname(__file__), '../data/english'))
-    train_data, english_train_label = mndata.load_training()
-    train_label = [train for train in english_train_label]
-    test_data, english_test_label = mndata.load_testing()
-    test_label = [test for test in english_test_label]
+    (train_data, train_label), (test_data, test_label) = load_all_data(True)
     # Insight into choosing hidden layers and their nodes:
     # https://www.linkedin.com/pulse/choosing-number-hidden-layers-neurons-neural-networks-sachdev
     # 3 hidden layers
