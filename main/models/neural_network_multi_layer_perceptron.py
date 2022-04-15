@@ -1,16 +1,15 @@
 import tensorflow as tf
 import numpy as np
 from sklearn.metrics import classification_report
-from main.utils.print import pretty_print_confusion
-
-from main.data.data_loader import load_all_data
+from utils.print import pretty_print_confusion
 
 
 class MultiLayerPerceptron:
-    def __init__(self, model_filename='MLP.h5', epochs = 5):
+    def __init__(self, model_filename='mlp.h5', epochs=5):
 
         self.epochs = epochs
         self.model = tf.keras.models.Sequential([
+            tf.keras.layers.Flatten(),
             tf.keras.Input(shape=784),
             tf.keras.layers.Dense(588, activation="sigmoid"),
             tf.keras.layers.Dense(392, activation="sigmoid"),
@@ -61,13 +60,3 @@ class MultiLayerPerceptron:
 
         return report
 
-
-def main():
-    mlp = MultiLayerPerceptron(model_filename='m1.h5')
-    (train_images, train_labels), (test_images, test_labels) = load_all_data(True)
-    #mlp.train(train_images, train_labels)
-    mlp.evaluate(test_images, test_labels, load=True)
-
-
-if __name__ == "__main__":
-    main()

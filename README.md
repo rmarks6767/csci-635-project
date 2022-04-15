@@ -21,14 +21,14 @@ python main/main.py
 ### Optional Command Line Arguments
 
 #### `--training-only`
-This can be used to generate the trained models that can be used in the `--evaluations-only` section
+This can be used to generate the trained models.
 
 ```
 python main/main.py --training-only
 ```
 
-#### `--use-local-models`
-This argument should be used when wanting to utilize the given trained models, as the training does take a little bit of time. This is equivalent to only running the evaluations on the models.
+#### `--retrain-models`
+This argument should be used to retrain the models and overwrite the models folder.
 
 ```
 python main/main.py --use-local-models

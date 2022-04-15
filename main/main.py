@@ -6,6 +6,7 @@ from augmentation.scaling import scale_image
 from models.svm import SVM
 from models.cnn import CNN
 from models.nn import NN
+from models.neural_network_multi_layer_perceptron import MultiLayerPerceptron
 from models.transfer_nn import TransferNN
 import argparse as ap
 import numpy as np
@@ -42,7 +43,7 @@ def augment_data(images, labels):
 def main():
   parser = ap.ArgumentParser(description='Running CSCI 635 Project')
   parser.add_argument('--training-only', help='Only run the model training on the project', action='store_true')
-  parser.add_argument('--use-local-models', help='Use the locally trained models that have been provided', action='store_true')
+  parser.add_argument('--retrain-models', help='Retrain the models and overwrite the models folder', action='store_true')
   parser.add_argument('--no-verbose', help='Turns off the verbosity of Tensorflow', action='store_false')
 
   args = parser.parse_args()
@@ -84,10 +85,11 @@ def main():
   svm = SVM()
   cnn = CNN()
   nn = NN()
+  mlp = MultiLayerPerceptron()
   cnn_transfer = CNN(model_filename='base_transfer.h5')
-  transferNN = TransferNN(base_model=cnn_transfer, load_base=True if args.use_local_models else False)
+  transferNN = TransferNN(base_model=cnn_transfer, load_base=False if args.retrain_models else True)
 
-  if not args.use_local_models:
+  if args.retrain_models:
     start = time.time()
 
     # Train all of our models 
@@ -103,6 +105,10 @@ def main():
     nn.train(training_images, training_labels, args.no_verbose)
     print('===== END TRAINING NN ====')
 
+    print('===== START TRAINING MLP ====')
+    mlp.train(training_images, training_labels, args.no_verbose)
+    print('===== END TRAINING MLP ====')
+
     # We have to also train the base model for our transferred model
     print('===== START TRAINING TRANSFER NN ====')
     cnn_transfer.train(training_images_transfer, training_labels_transfer, False)
@@ -116,19 +122,23 @@ def main():
 
     ############ Step 4 - Gather statistics about our data on the model ############ 
     print('\n===== BEGIN RESULTS FOR SVM (this one takes a while to print for some reason) =====\n')
-    svm_results = svm.evaluate(test_images, test_labels, args.use_local_models)
+    svm_results = svm.evaluate(test_images, test_labels, not args.retrain_models)
     print('===== END RESULTS FOR SVM =====\n')
 
     print('===== BEGIN RESULTS FOR CNN =====\n')
-    cnn_results = cnn.evaluate(test_images, test_labels, args.use_local_models)
+    cnn_results = cnn.evaluate(test_images, test_labels, not args.retrain_models)
     print('===== END RESULTS FOR CNN =====\n')
 
     print('===== BEGIN RESULTS FOR NN =====\n')
-    nn_results = nn.evaluate(test_images, test_labels, args.use_local_models)
+    nn_results = nn.evaluate(test_images, test_labels, not args.retrain_models)
     print('===== END RESULTS FOR NN =====\n')
 
+    print('===== BEGIN RESULTS FOR MLP =====\n')
+    mlp_results = mlp.evaluate(test_images, test_labels, not args.retrain_models)
+    print('===== END RESULTS FOR MLP =====\n')
+
     print('===== BEGIN RESULTS FOR TRANSFER NN =====\n')
-    transfer_results = transferNN.evaluate(s_test_images, s_test_labels, args.use_local_models)
+    transfer_results = transferNN.evaluate(s_test_images, s_test_labels, not args.retrain_models)
     print('===== END RESULTS FOR TRANSFER NN =====\n')
 
     print('\n==================== END RESULTS ====================\n')
@@ -138,6 +148,7 @@ def main():
       'Support Vector Machine': svm_results,
       'Convolutional Neural Network': cnn_results,
       'Neural Network': nn_results,
+      'Multi Layer Perceptron': mlp_results,
       'Transferred Neural Network': transfer_results,
     }
 
