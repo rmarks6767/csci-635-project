@@ -1,5 +1,5 @@
 import sys
-from main.data.data_loader import labels
+from data.data_loader import labels
 
 def pretty_print_confusion(confusion):
   print('\n===== Confusion Matrix =====')
