@@ -156,16 +156,3 @@ Labels:
 ```
 
 Using these, you can see which numbers performed poorly and which ones performed well. The rest of the evaluation metrics are pretty self explanatory.
-
-## Different Models
-
-### SVM 
-
-### Convolutional Neural Network
-
-## Neural Network
-
-
-### Convolutional Neural Network Transfer Learning
-The Transfer learning first trained our convolutional neural network model on only the English and Arabic numerals, then applied that to another two 
-neural network layers, running the Sylheti numerals through this. The results were not great, and seemed to be a little inconsistent between runs.
