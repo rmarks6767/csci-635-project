@@ -1,6 +1,29 @@
 import numpy as np
 import os
 
+labels = {
+  0: 'English and Sylheti 0, Arabic 5',
+  1: 'All Languages 1',
+  2: 'English 2',
+  3: 'English 3',
+  4: 'English 4',
+  5: 'English 5',
+  6: 'English 6',
+  7: 'English 7, Arabic 6',
+  8: 'English and Sylheti 8',
+  9: 'All Languages 9',
+  10: 'Arabic 0',
+  11: 'Arabic and Sylheti 2',
+  12: 'Arabic 3',
+  13: 'Sylheti 3',
+  14: 'Arabic 4',
+  15: 'Sylheti 4',
+  16: 'Sylheti 5',
+  17: 'Sylheti 6',
+  18: 'Arabic and Sylheti 7',
+  19: 'Arabic 8',
+}
+
 '''
   Data is saved as an n x (28 x 28) numpy array. If the data should be flattened, 
   pass in the flatten parameter

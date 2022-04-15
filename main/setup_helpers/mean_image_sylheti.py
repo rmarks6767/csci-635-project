@@ -4,6 +4,7 @@ import numpy as np
 
 paths=os.path.join(os.path.dirname(__file__), 'data\sylheti')
 def mean_sylethi(paths):
+    '''Compute the mean image for each number'''
     image0,image1,image2,image3,image4,image5,image6,image7,image8,image9=[],[],[],[],[],[],[],[],[],[]
     mean0,mean1,mean2,mean3,mean4,mean5,mean6,mean7,mean8,mean9=0,0,0,0,0,0,0,0,0,0
     for i in os.listdir(paths):
@@ -60,14 +61,14 @@ def mean_sylethi(paths):
     imean9=Image.fromarray(mean9.astype(np.uint8))
 
     imean0.save('data\sylheti\mean_images\mean_0_sylethi.png','png')
-    # imean1.save('data\sylheti\mean_images\mean_1_sylethi.png','png')
-    # imean2.save('data\sylheti\mean_images\mean_2_sylethi.png','png')
-    # imean3.save('data\sylheti\mean_images\mean_3_sylethi.png','png')
-    # imean4.save('data\sylheti\mean_images\mean_4_sylethi.png','png')
-    # imean5.save('data\sylheti\mean_images\mean_5_sylethi.png','png')
-    # imean6.save('data\sylheti\mean_images\mean_6_sylethi.png','png')
-    # imean7.save('data\sylheti\mean_images\mean_7_sylethi.png','png')
-    # imean8.save('data\sylheti\mean_images\mean_8_sylethi.png','png')
-    # imean9.save('data\sylheti\mean_images\mean_9_sylethi.png','png')
+    imean1.save('data\sylheti\mean_images\mean_1_sylethi.png','png')
+    imean2.save('data\sylheti\mean_images\mean_2_sylethi.png','png')
+    imean3.save('data\sylheti\mean_images\mean_3_sylethi.png','png')
+    imean4.save('data\sylheti\mean_images\mean_4_sylethi.png','png')
+    imean5.save('data\sylheti\mean_images\mean_5_sylethi.png','png')
+    imean6.save('data\sylheti\mean_images\mean_6_sylethi.png','png')
+    imean7.save('data\sylheti\mean_images\mean_7_sylethi.png','png')
+    imean8.save('data\sylheti\mean_images\mean_8_sylethi.png','png')
+    imean9.save('data\sylheti\mean_images\mean_9_sylethi.png','png')
 
 mean_sylethi(paths)

@@ -1,34 +1,31 @@
 import tensorflow as tf
 import numpy as np
+import cv2
 from sklearn.metrics import classification_report
 from utils.print import pretty_print_confusion
 
-# Convolutional Neural Network
-class CNN:
-  def __init__(self, model_filename = 'cnn.h5', epochs = 5):
+# Transfer Neural Network from MobileNet_v2
+class TransferNN:
+  def __init__(self, base_model, model_filename = 'transfer.h5', epochs = 5, load_base=False):
     self.model_filename = model_filename
     self.epochs = epochs
+    base_model = base_model.model
 
-    # Model will have 3 convolution layers into three hidden NN layers,
-    # using Softmax for activation on the final layer
+    if load_base == True:
+      base_model = tf.keras.models.load_model(f'main/trained_models/base_{self.model_filename}')
+
     self.model = tf.keras.models.Sequential([
-      tf.keras.layers.Conv2D(28, (1,1), padding='same', activation="relu",input_shape=(28, 28, 1)),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
-      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
-      tf.keras.layers.Conv2D(64, (3,3), padding='same', activation="relu"),
-      tf.keras.layers.MaxPooling2D((2, 2), strides=2),
-      tf.keras.layers.Flatten(),
-      tf.keras.layers.Dense(100, activation="relu"),
-      tf.keras.layers.Dense(64, activation="relu"),
-      tf.keras.layers.Dropout(0.2),
-      tf.keras.layers.Dense(20, activation="softmax")
+      base_model,
+      tf.keras.layers.Dense(20),
+      tf.keras.layers.Dense(65),
+      tf.keras.layers.Dense(20)
     ])
 
     # Define a loss function for our model
-    self.loss_func = tf.keras.losses.SparseCategoricalCrossentropy()
+    self.loss_func = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
   def train(self, train_images, train_labels, verbose = True):
+    # Load the data
     train_images = train_images / 255.0
 
     # Define predictions and loss function outputs
