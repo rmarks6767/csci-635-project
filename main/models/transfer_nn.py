@@ -1,10 +1,9 @@
 import tensorflow as tf
 import numpy as np
-import cv2
 from sklearn.metrics import classification_report
 from utils.print import pretty_print_confusion
 
-# Transfer Neural Network from MobileNet_v2
+# Transfer Neural Network from our CNN
 class TransferNN:
   def __init__(self, base_model, model_filename = 'transfer.h5', epochs = 5, load_base=False):
     self.model_filename = model_filename
