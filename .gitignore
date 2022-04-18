@@ -1,5 +1,2 @@
 __pycache__
 .vscode
-
-# We don't want to commit the trained models
-trained_models
