@@ -1,7 +1,5 @@
 from PIL import Image
-import os
 import numpy as np
-import sys
 from data_loader import load_all_data
 images_by_label= {
   0:[],

@@ -1,6 +1,7 @@
 import numpy as np
 import os
 
+# Class numbers to a human readable format
 labels = {
   0: 'English and Sylheti 0, Arabic 5',
   1: 'All Languages 1',

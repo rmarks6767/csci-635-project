@@ -1,6 +1,7 @@
 import sys
 from data.data_loader import labels
 
+# Helper function used to pretty print the confusion matrices
 def pretty_print_confusion(confusion):
   print('\n===== Confusion Matrix =====')
   for i in range(0, 20):

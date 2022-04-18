@@ -11,8 +11,9 @@ python -m pip install -r requirements.txt
 ```
 
 ## Running the Project
-Running the following command will run all of the augmentation, trainings, and show the evaluations.
-To run only the training or evaluations, see the optional arguments below.
+Running the following command will run all of the augmentation and show the evaluation report.
+This will also use the included, pretrained models which are in the `trained_models` folder. To 
+generate new models, use some of the below optional arguments.
 
 ```
 python main/main.py
@@ -28,17 +29,17 @@ python main/main.py --training-only
 ```
 
 #### `--retrain-models`
-This argument should be used to retrain the models and overwrite the models folder.
+This argument should be used to retrain the models and overwrite the ones in the  `trained_models` folder.
 
 ```
-python main/main.py --use-local-models
+python main/main.py --retrain-models
 ```
 
 #### `--no-verbose`
-To turn off all the extrangeous output from the model training, use this argument.
+To turn off all the extraneous output from the model training, use this argument.
 
 ```
-python main/main.py --no-verbose
+python main/main.py --training-only --no-verbose
 ```
 
 ### Making Sense of the Evaluation output
