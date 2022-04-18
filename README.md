@@ -7,7 +7,7 @@ The data is stored in compressed numpy arrays that you can find in the `main/dat
 To begin running the project, you must install several dependencies:
 
 ```sh
-python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 ## Running the Project
@@ -16,7 +16,7 @@ This will also use the included, pretrained models which are in the `trained_mod
 generate new models, use some of the below optional arguments.
 
 ```
-python main/main.py
+python3 main/main.py
 ```
 
 ### Optional Command Line Arguments
@@ -25,21 +25,21 @@ python main/main.py
 This can be used to generate the trained models.
 
 ```
-python main/main.py --training-only
+python3 main/main.py --training-only
 ```
 
 #### `--retrain-models`
 This argument should be used to retrain the models and overwrite the ones in the  `trained_models` folder.
 
 ```
-python main/main.py --retrain-models
+python3 main/main.py --retrain-models
 ```
 
 #### `--no-verbose`
 To turn off all the extraneous output from the model training, use this argument.
 
 ```
-python main/main.py --training-only --no-verbose
+python3 main/main.py --training-only --no-verbose
 ```
 
 ### Making Sense of the Evaluation output
